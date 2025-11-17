@@ -2,7 +2,9 @@ package kz.rikudo.study.expencetracker.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -11,6 +13,8 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "transaction")
 public class Transaction {
     @Id
@@ -39,22 +43,18 @@ public class Transaction {
     @PastOrPresent(message = "Date cannot be in the future")
     private LocalDate date;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public Transaction() {
-    }
 
-    public Transaction(Long id, Type type, String category, BigDecimal amount, LocalDate date) {
-        this.id = id;
+
+    public Transaction(Type type, String category, BigDecimal amount, LocalDate date, User user) {
         this.type = type;
         this.category = category;
         this.amount = amount;
         this.date = date;
-    }
-    public Transaction(Type type, String category, BigDecimal amount, LocalDate date) {
-        this.type = type;
-        this.category = category;
-        this.amount = amount;
-        this.date = date;
+        this.user = user;
     }
 
 
