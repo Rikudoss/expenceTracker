@@ -5,9 +5,11 @@ import kz.rikudo.study.expencetracker.dto.TransactionRequestDTO;
 import kz.rikudo.study.expencetracker.dto.TransactionResponseDTO;
 import kz.rikudo.study.expencetracker.entity.Transaction;
 import kz.rikudo.study.expencetracker.entity.Type;
+import kz.rikudo.study.expencetracker.entity.User;
 import kz.rikudo.study.expencetracker.mapper.TransactionMapper;
 import kz.rikudo.study.expencetracker.repository.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -41,8 +43,9 @@ public class TransactionService {
                 .orElse(null);
     }
 
-    public TransactionResponseDTO createTransaction(TransactionRequestDTO dto) {
+    public TransactionResponseDTO createTransaction(TransactionRequestDTO dto, User user) {
         Transaction transaction = transactionMapper.toEntity(dto);
+        transaction.setUser(user);
         return transactionMapper.toDTO(transactionRepository.save(transaction));
     }
 
