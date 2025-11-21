@@ -3,8 +3,11 @@ package kz.rikudo.study.expencetracker.controller;
 import kz.rikudo.study.expencetracker.dto.TransactionRequestDTO;
 import kz.rikudo.study.expencetracker.dto.TransactionResponseDTO;
 import kz.rikudo.study.expencetracker.entity.Transaction;
+import kz.rikudo.study.expencetracker.entity.User;
 import kz.rikudo.study.expencetracker.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -14,6 +17,7 @@ import java.util.Locale;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/transactions")
 public class TransactionController {
     private final TransactionService transactionService;
     @Autowired
@@ -36,9 +40,11 @@ public class TransactionController {
 
     @PostMapping
     public TransactionResponseDTO createTransaction(
-            @RequestBody TransactionRequestDTO requestDTO
+            @RequestBody TransactionRequestDTO requestDTO,
+            Authentication authentication
     ){
-        return transactionService.createTransaction(requestDTO);
+        User user = (User) authentication.getPrincipal();
+        return transactionService.createTransaction(requestDTO,user);
     }
 
     @DeleteMapping("/{transactionId}")
@@ -56,7 +62,7 @@ public class TransactionController {
         return transactionService.updateTransaction(id,updatedTransaction);
     }
     // фильтр для дат и категории
-    @GetMapping("/transactions")
+    @GetMapping("/filter")
     public List<TransactionResponseDTO> getTransactionsWithFilters(
             @RequestParam(required = false) String category,
             @RequestParam(required = false) LocalDate from,

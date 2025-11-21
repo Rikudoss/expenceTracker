@@ -49,13 +49,7 @@ public class Transaction {
 
 
 
-    public Transaction(Type type, String category, BigDecimal amount, LocalDate date, User user) {
-        this.type = type;
-        this.category = category;
-        this.amount = amount;
-        this.date = date;
-        this.user = user;
-    }
+
 
 
 
